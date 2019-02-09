@@ -29,6 +29,13 @@ create table orders (
 );
 create unique index brandOrdersIdx on orders (brand, ID);
 
+drop table if exists categories;
+create table categories (
+    ID char(36) not null primary key,
+    name text not null,
+    descr text not null
+);
+
 drop table if exists orderItems;
 create table orderItems (
     orderID char(36) not null,
@@ -42,8 +49,9 @@ create unique index orderItemsIdx on orderItems (orderID, itemID);
 drop table if exists items;
 create table items (
     ID char(36) primary key,
+    categoryID char(36) not null,
     brand char(6) not null,
-    name text,
+    name text not null,
     image text,
     descr text
 );

@@ -11,7 +11,7 @@ import (
 )
 
 type DB interface {
-	StockReport() (*stockReport, error)
+	StockReport(brand string) (*stockReport, error)
 }
 
 type stock struct {
@@ -32,7 +32,7 @@ type pgDB struct {
 }
 
 // StockReport retuns a struture with all the stock data needed
-func (h *pgDB) StockReport() (*stockReport, error) {
+func (h *pgDB) StockReport(brand string) (*stockReport, error) {
 	retval := &stockReport{}
 
 	// Get the overall status
@@ -42,7 +42,7 @@ func (h *pgDB) StockReport() (*stockReport, error) {
 	}
 
 	// Get the items part
-	err = h.db.Select("brand,id,name,round(random()*100) as qty").From("items").QueryStructs(&retval.Items)
+	err = h.db.Select("brand,id,name,round(random()*100) as qty").From("items").Where("brand=$1", brand).QueryStructs(&retval.Items)
 	return retval, err
 }
 

@@ -11,4 +11,4 @@ func (h *NullAPI) Version() string { return "v1null" }
 func (h *NullAPI) Hello(http.ResponseWriter, http.Request) {}
 
 // Stock does not much at all - its a NULL driver
-func (h *NullAPI) Stock(http.ResponseWriter, http.Request) {}
+func (h *NullAPI) StockReport(http.ResponseWriter, http.Request) {}

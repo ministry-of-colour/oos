@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/husobee/vestigo"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 )
@@ -54,12 +55,13 @@ func (h *Http) Hello(w http.ResponseWriter, r *http.Request) {
 }
 
 // Stock writes a stock update in JSON
-func (h *Http) Stock(w http.ResponseWriter, r *http.Request) {
+func (h *Http) StockReport(w http.ResponseWriter, r *http.Request) {
 	t1 := time.Now()
+	brand := vestigo.Param(r, "brand")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-	items, err := h.db.StockReport()
+	items, err := h.db.StockReport(brand)
 	if err != nil {
 		h.log.WithError(err).Warn("error fetching all the items")
 	}
