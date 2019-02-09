@@ -14,9 +14,7 @@ type Http struct {
 
 // NewHttp returns a new HttpAPI
 func NewHttp(l *logrus.Logger) *Http {
-	return &Http{
-		log: l,
-	}
+	return &Http{log: l}
 }
 
 // Version returns the current version number as a string
@@ -65,6 +63,7 @@ func (h *Http) Stock(w http.ResponseWriter, r *http.Request) {
 		Items []stock
 	}
 
+	// TODO - get this from the DB
 	s := stocks{
 		Note: "We have plenty left in stock",
 		Items: []stock{
