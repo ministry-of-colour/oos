@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/sirupsen/logrus"
@@ -46,4 +47,33 @@ func (h *Http) Hello(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Hello, World!" + "\n"))
 	h.Log(r, "Hello")
+}
+
+// Stock writes a stock update in JSON
+func (h *Http) Stock(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	type stock struct {
+		Item  string
+		Descr string
+		Qty   string
+	}
+
+	type stocks struct {
+		Note  string
+		Items []stock
+	}
+
+	s := stocks{
+		Note: "We have plenty left in stock",
+		Items: []stock{
+			stock{Item: "abc", Descr: "the abc item", Qty: "10"},
+			stock{Item: "def", Descr: "the def item", Qty: "20"},
+			stock{Item: "xyz", Descr: "the xyz item", Qty: "6"},
+		},
+	}
+
+	json.NewEncoder(w).Encode(s)
+	h.Log(r, "Stock")
 }
