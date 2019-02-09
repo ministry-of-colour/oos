@@ -8,6 +8,14 @@ create table brands (
     icon text not null
 );
 
+drop table if exists brandStockStatus;
+create table brandStockStatus (
+    brandID char(12) not null,
+    date timestamp,
+    descr text
+);
+create index brandStockIdx on brandStockStatus (brandID, date);
+
 drop table if exists orders;
 create table orders (
     ID char(36) primary key,
@@ -40,5 +48,6 @@ create table items (
     descr text
 );
 create unique index brandItemsIdx on items (brand, ID);
+
 
 
