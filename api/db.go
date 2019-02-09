@@ -10,15 +10,17 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// DB is minimum set of functions needed to implement a database driver for the API
 type DB interface {
 	StockReport(brand string) (*stockReport, error)
 }
 
 type stock struct {
-	Brand string `db:"brand"`
-	Item  string `db:"id"`
-	Descr string `db:"name"`
-	Qty   string `db:"qty"`
+	Brand    string `db:"brand"`
+	Item     string `db:"id"`
+	Category string `db:"categoryid"`
+	Descr    string `db:"name"`
+	Qty      string `db:"qty"`
 }
 
 type stockReport struct {
@@ -36,13 +38,22 @@ func (h *pgDB) StockReport(brand string) (*stockReport, error) {
 	retval := &stockReport{}
 
 	// Get the overall status
-	err := h.db.Select("descr").From("brandStockStatus").Limit(1).QueryScalar(&retval.Note)
+	err := h.db.
+		Select("descr").
+		From("brandStockStatus").
+		Where("brand=$1", brand).
+		OrderBy("date desc").
+		Limit(1).
+		QueryScalar(&retval.Note)
 	if err != nil {
 		return retval, err
 	}
 
 	// Get the items part
-	err = h.db.Select("brand,id,name,round(random()*100) as qty").From("items").Where("brand=$1", brand).QueryStructs(&retval.Items)
+	err = h.db.Select("brand,id,name,round(random()*100) as qty").
+		From("items").
+		Where("brand=$1", brand).
+		QueryStructs(&retval.Items)
 	return retval, err
 }
 

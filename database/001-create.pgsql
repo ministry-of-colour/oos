@@ -10,11 +10,11 @@ create table brands (
 
 drop table if exists brandStockStatus;
 create table brandStockStatus (
-    brandID char(12) not null,
+    brand char(12) not null,
     date timestamp,
     descr text
 );
-create index brandStockIdx on brandStockStatus (brandID, date);
+create index brandStockIdx on brandStockStatus (brand, date);
 
 drop table if exists orders;
 create table orders (
