@@ -1,7 +1,12 @@
-all:
+all: dev
 
 setup:
-  npm install
+	npm install vuetify --save
+	npm install vue-router --save
+	npm install
 
-run:
-  npm run dev
+dev:
+	npm run dev
+
+build:
+	npm run build
